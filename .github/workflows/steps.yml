@@ -2,7 +2,7 @@ name: 'Run steps'
 
 on:
   schedule:
-  - cron: '50 23 * * *'
+  - cron: '46 6 * * *'
 
 jobs:
   run-step:
