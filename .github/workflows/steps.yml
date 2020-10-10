@@ -2,14 +2,12 @@ name: 'Run steps'
 
 on:
   schedule:
-  - cron: '46 6 * * *'
+  - cron: '6 7 * * *'
 
 jobs:
   run-step:
     name: 'Run step'
     runs-on: ubuntu-latest
     steps:
-    - name: 'run 13632377709'
-      run: curl -s -G -d 'mobile=13632377709' -d 'psw=Dagou520**' -d 'step=16952' http://api.eyoutw.com/fed/test/steps/submit.php
-    - name: 'run 13642661574'
-      run: curl -s -G -d 'mobile=13642661574' -d 'psw=Dagou520**' -d 'step=18137' http://api.eyoutw.com/fed/test/steps/submit.php
+    - name: 'Working'
+      run: bash ./task/steps.sh
