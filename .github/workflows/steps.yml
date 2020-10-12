@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 'Working'
-      run: bash ./task/steps.sh
+      run: bash ../../task/steps.sh
