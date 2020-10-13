@@ -1,0 +1,22 @@
+{
+  "name": "push",
+  "version": "1.0.0",
+  "description": "用作每日发请求",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chen-rongliang/push.git"
+  },
+  "author": "MO (chen-rongliang@qq.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chen-rongliang/push/issues"
+  },
+  "homepage": "https://github.com/chen-rongliang/push#readme",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
