@@ -5,7 +5,7 @@ on:
   - cron: 50 0 * * *
 
 jobs:
-  sys:
+  task:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
