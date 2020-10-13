@@ -8,11 +8,16 @@ jobs:
   sys:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Setup nodejs
-      - uses: actions/setup-node@v1
+        uses: actions/setup-node@v1
         with:
           node-version: '12'
           check-latest: true
-      - run: npm install
-      - run: npm start
+      - name: Run task
+        run: |
+          # install dependencies
+          npm install
+          # start task
+          npm start
