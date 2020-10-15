@@ -40,7 +40,7 @@ list.forEach(async ({ loginName, password }) => {
 
         // 登录后参数提取
         const { accessToken, userId } = data
-        // 步数模拟
+        // 步数模拟，可设置为固定值，或者像这样的区间值随机数
         const step = Utils.random(1e4, 2e4)
         // 时间
         const time = new Date()
