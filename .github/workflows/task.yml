@@ -4,7 +4,7 @@ name: "Task"
 on: 
   schedule: 
   # 每日定时7点50分跑一次任务
-  - cron: "50 0 * * *"
+  - cron: "50 23 * * *"
 jobs: 
   task: 
     # 设置运行环境
