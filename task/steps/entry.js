@@ -10,6 +10,9 @@
  * PS. 补充说明，由于近期直接请求已经失效，需要自行在乐心APP绑定手环SN码才可正常刷
  */
 
+/* 已失效，略过 */
+return;
+
 const fetch = require('node-fetch')
 const Utils = require('../../lib/utils')
 const API = require('./api.js')
