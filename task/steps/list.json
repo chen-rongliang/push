@@ -1,10 +1,6 @@
 [
     {
-        "loginName": "13632377709",
-        "password": "426f256242183e1a162bf4cd65d3dbda"
-    },
-    {
-        "loginName": "13642661574",
-        "password": "426f256242183e1a162bf4cd65d3dbda"
+        "account": "13632377709",
+        "login_token": "NQVBQFJyQktGHlp6QkpbRl5LRl5qek4uXAQEBAAAAAOI9mGD8nKW2thKiX047yqutpyLG3-tgoKqqj-x_yeEX_-4WxV14ohxTeaxaH6x73uIGBEyxdONqt7OfegsPpQzjH4p418xRqls1Zku7SbkExTcJVNt_xDkclLXs6J_EqciXRM0PrgYU42ZoVjiVrO9MwRA-4euMAItMpFNXT6oC-5rQXxxFnFak8b1yQKKEsoptzCjzbehKp0ieNTkzSg8"
     }
 ]

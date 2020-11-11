@@ -1,90 +1,98 @@
 /*
  * 刷步数的任务
- * 这个是利用了乐心健康app的接口做处理的
- * 步骤1. 用手机号注册乐心健康账号，并设置密码
- * 步骤2. app内绑定同步支付宝和微信
- * 步骤3. md5步骤1中设置的密码，得到32位小写加密串
- * 步骤4. 在list.json中更替填写你自己的账号信息
- * 步骤5. 提交
- * 
- * PS. 补充说明，由于近期直接请求已经失效，需要自行在乐心APP绑定手环SN码才可正常刷
  */
 
-/* 已失效，略过 */
-return;
-
-const fetch = require('node-fetch')
+const axios = require('axios')
 const Utils = require('../../lib/utils')
 const API = require('./api.js')
 const list = require('./list.json')
+const data_json = require('./data')
+
+
+axios.interceptors.response.use(
+    response => {
+        // 请求数据返回
+        let data = response.data
+        if (typeof data == 'string' && /\{|\}/.test(data)) {
+            data = JSON.parse(data)
+        }
+        return Promise.resolve(data)
+    },
+    error => {
+        console.log(error)
+    }
+)
+
 
 console.log('开始刷步任务')
 
 ~(async function () {
 
-    // post压缩
-    function post (url, data, headers) {
-        return fetch(url, {
-            method: 'post',
-            body: JSON.stringify(data),
-            headers: Object.assign({
-                'Content-Type': 'application/json; charset=utf-8'
-            }, headers)
-        }).then(res => res.json())
+    function getToken (login_token) {
+        return axios.get(API.getToken, {
+            params: {
+                app_name: "com.xiaomi.hm.health",
+                dn: "api-user.huami.com,api-mifit.huami.com,app-analytics.huami.com",
+                login_token
+            },
+            headers: {
+                'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)'
+            }
+        })
     }
 
-    for(let { loginName, password } of list) {
-        // 遍历账号信息，开始登录
-        let { code, data } = await post(API.login, {
-            appType: 6,
-            clientId: "88888",
-            loginName,
-            password,
-            roleType: 0
+    function runStep (apptoken, userid) {
+
+        let step = Utils.random(1e4, 2e4)
+        let now = new Date()
+        let today = Utils.timeFormat(now)
+        now = Math.floor(now / 1e3)
+        
+        return axios.post(`${API.submit}?t=${now}`, {
+            userid,
+            last_sync_data_time: now,
+            device_type: "0",
+            last_deviceid: "DA932FFFFE8816E7",
+            data_json: data_json(today, step)
+        },
+        {
+            transformRequest: [data => {
+                let arr = []
+                Object.keys(data).forEach(key => {
+                    arr.push(`${key}=${data[key]}`)
+                })
+                return arr.join('&')
+            }],
+            headers: {
+                apptoken,
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)'
+            }
         })
-            
-        // 登录成功
-        if(code == 200) {
-            console.log(`<${loginName}>登录成功!`)
+    }
 
-            // 登录后参数提取
-            const { accessToken, userId } = data
-            // 步数模拟，可设置为固定值，或者像这样的区间值随机数
-            const step = Utils.random(1e4, 2e4)
-            // 时间
-            const time = new Date()
-            // 请求参数
-            const param = {
-                active: 1,
-                DataSource: 2,
-                dataSource: 2,
-                deviceId: "M_NULL",
-                exerciseTime: 0,
-                isUpload: 0,
-                priority: 0,
-                type: 2,
-                calories: Math.floor(step/4),
-                distance: Math.floor(step/3),
-                measurementTime: Utils.timeFormat(time, 'yyyy-mm-dd hh:MM:ss'),
-                step,
-                updated: time / 1,
-                userId
-            }
+    for(let { account, login_token } of list) {
+        
+        // 提取信息
+        let { token_info } = await getToken(login_token)
 
-            // 刷！
-            let result = await post(API.submit, {list: [ param ]},{
-                Cookie: `accessToken=${accessToken}`
-            })
-
-            if(result.code == 200) {
-                console.log(`<${loginName}>刷步成功! 当前步数：${step}。`)
-            } else {
-                console.error(`<${loginName}>刷步失败[code:${result.code}]`)
-            }
-
-        } else {
-            console.error(`登录失败[code:${code}]`)
+        if(!token_info) {
+            console.error('login_token已失效，请重新获取')
+            return
         }
+
+
+        // 用户信息
+        let { app_token, user_id } = token_info
+
+        // 开始刷步
+        let res = await runStep(app_token, user_id)
+
+        if(typeof res !== 'object') return
+        
+        if(res.code == 1) console.log(`<${account}>刷步成功！`)
+        else if(res.code == 0) console.error(`<${account}>刷步失败，app_token已失效！`)
+        else console.error(`<${account}>刷步失败，未知错误.`)
 
     }
 

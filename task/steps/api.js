@@ -1,8 +1,8 @@
 // 接口
-const HOST = 'http://sports.lifesense.com/'
 const API = {
-    login: `${HOST}sessions_service/login?systemType=2&version=4.6.7`,
-    submit: `${HOST}sport_service/sport/sport/uploadMobileStepV2?version=4.5&systemType=2`
+    getTime: `http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp`,
+    getToken: `https://account-cn.huami.com/v1/client/app_tokens`,
+    submit: `https://api-mifit-cn2.huami.com/v1/data/band_data.json`
 }
 
 module.exports = API
