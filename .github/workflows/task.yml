@@ -2,9 +2,11 @@
 name: "Task"
 
 on: 
+  workflow_dispatch: # 手动触发
   schedule: 
   # 每日定时7点50分跑一次任务
   - cron: "50 23 * * *"
+  
 jobs: 
   task: 
     # 设置运行环境
