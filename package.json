@@ -16,7 +16,7 @@
     "url": "https://github.com/chen-rongliang/push/issues"
   },
   "homepage": "https://github.com/chen-rongliang/push#readme",
-  "dependencies": {
-    "node-fetch": "^2.6.1"
+  "devDependencies": {
+    "axios": "^0.21.0"
   }
 }
